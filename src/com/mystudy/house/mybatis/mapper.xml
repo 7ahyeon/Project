@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="house">
+	
+	
+	<!-- 나의 쇼핑 -->
+	
+	<!-- 전체 문의글 목록 조회 -->
+	<select id="list" resultType="myinquiryVO">
+		SELECT P.PRODUCT_NAME PRODUCT_NAME, I.REGDATE QDATE, 
+			   I.COMMENTS CONTENTS, C.COMMENTS COMMENTS, 
+			   C.REGDATE ADATE, T.COMPANY_NAME COMPANY_NAME
+		FROM PRODUCT P, PRODUCTINQUIRY I, PRODUCTINQUIRY_COM C, PARTNER T
+		WHERE P.PRODUCT_NUM = I.PRODUCT_NUM
+		AND I.PROIN_IDX = C.PROIN_IDX
+		AND C.PARTNER_NUM = T.PARTNER_NUM
+		ORDER BY I.REGDATE DESC
+	</select>
+	
+	<!-- 전체 문의글 수 조회 -->
+	<select id="inquiryTotalCount" resultType="int">
+		SELECT COUNT(*)
+        FROM PRODUCTINQUIRY
+        WHERE ID = #{id}
+	</select>
+
+	
+	<!-- 페이지당 문의 목록 조회 -->
+	<select id="inquiryListPage" parameterType="myinquirypageVO" resultType="myinquiryVO">
+		SELECT *
+		  FROM (SELECT ROWNUM R_NUM, P.*
+		          FROM (SELECT P.PRODUCT_NAME PRODUCT_NAME, I.REGDATE QDATE, I.COMMENTS CONTENTS, I.PROIN_IDX PROIN_IDX
+						FROM PRODUCT P, PRODUCTINQUIRY I
+						WHERE I.ID = #{id}
+						AND P.PRODUCT_NUM = I.PRODUCT_NUM
+						ORDER BY I.REGDATE DESC
+		                ) P
+		       )
+		 WHERE R_NUM BETWEEN #{begin} AND #{end}
+	</select>
+	
+	<!-- 문의 목록 조회(아이디) -->
+	<select id="inquiryList" parameterType="string" resultType="myinquiryVO">
+		SELECT P.PRODUCT_NAME PRODUCT_NAME, I.REGDATE QDATE, I.COMMENTS CONTENTS, I.PROIN_IDX PROIN_IDX
+		FROM PRODUCT P INNER JOIN PRODUCTINQUIRY I
+			ON P.PRODUCT_NUM = I.PRODUCT_NUM
+		WHERE I.ID = #{id}
+		ORDER BY I.REGDATE DESC
+	</select>
+	
+	<!-- 문의 답변 조회 -->
+	<select id="inquiryComlist" parameterType="int"  resultType="myinquirycommentVO">
+		SELECT C.COMMENTS COMMENTS, C.REGDATE ADATE, T.COMPANY_NAME COMPANY_NAME, C.PROIN_IDX PROIN_IDX
+		FROM PRODUCTINQUIRY_COM C INNER JOIN PARTNER T
+				ON C.PARTNER_NUM = T.PARTNER_NUM
+		WHERE C.PROIN_IDX = #{proinIdx} 
+	</select>
+
+	<!-- 문의 삭제 -->
+	<delete id="deleteInquiry" parameterType="int">
+		DELETE FROM PRODUCTINQUIRY
+		WHERE PROIN_IDX = #{proinIdx}
+	</delete>
+	
+	<!-- 문의 답글 삭제 -->
+	<delete id="deleteInquiryCom" parameterType="int">
+		DELETE FROM PRODUCTINQUIRY_COM
+		WHERE PROIN_IDX = #{proinIdx}
+	</delete>
+
+	<!-- 포인트 조회(아이디) -->
+	<select id="myPoint" parameterType="string" resultType="int">
+		SELECT POINT
+		FROM MEMBERS
+		WHERE ID = #{id}
+	</select>
+
+	<!-- 포인트 내역 조회(아이디) -->
+	<select id="myPointList" parameterType="string" resultType="mypointVO">
+		SELECT M.POINT POINT, O.ADD_POINT ADD_POINT, O.POINT_USE POINT_USE, 
+				O.REGDATE REGDATE
+		FROM ORDERS O INNER JOIN MEMBERS M
+			ON M.ID = O.ID 
+		WHERE M.ID = #{id}
+		ORDER BY O.REGDATE DESC
+	</select>
+	
+	<!-- 포인트 적립/사용 주문 상품 조회 -->
+	<select id="myPointProduct" parameterType="int" resultType="String">
+		SELECT PRODUCT_NAME
+		FROM PRODUCT
+		WHERE PRODUCT_NUM = (SELECT PRODUCT_NUM
+								FROM ORDER_PRODUCT
+								WHERE ORDER_NUM = #{orderNum}
+								)
+	</select>
+	
+	<!-- 회원 등급 조회 -->
+	<select id="grade" parameterType="string" resultType="string">
+		SELECT GRADE_NAME
+        FROM GRADE
+        WHERE GRADE_NUM = (SELECT GRADE_NUM
+        					FROM MEMBERS
+        					WHERE ID = #{id})
+	</select>
+
+	<!-- 최근 3개월 실적(구매 횟수) 조회 -->
+	<select id="threeMonthOrderTimes" parameterType="myidperiodVO" resultType="int">
+		SELECT COUNT(*)
+        FROM ORDERS
+        WHERE ID = #{id} 
+        AND REGDATE BETWEEN #{ago} AND #{today}
+	</select>
+	
+	<!-- 최근 3개월 실적(실결제 금액) 조회 -->
+	<select id="threeMonthTotPrice" parameterType="myidperiodVO" resultType="int">
+		SELECT SUM(TOT_PRICE)
+        FROM ORDERS
+        WHERE ID = #{id} 
+        AND REGDATE BETWEEN #{ago} AND #{today}
+	</select>
+
+	<!-- 주문 내역 조회 -->
+	<select id="orderList" parameterType="myidperiodVO" resultType="myorderlistVO">
+		SELECT O.SHIPPING_STATUS SHIPPING_STATUS, O.ORDER_NUM ORDER_NUM, 
+				T.COMPANY_NAME COMPANY_NAME, T.COMPANY_PHONE COMPANY_PHONE,
+				T.SHIPPING SHIPPING, P.PRODUCT_NAME PRODUCT_NAME, 
+				P.CATEGORY_DETAIL CATEGORY_DETAIL, O.REGDATE REGDATE, 
+				OP.COUNT COUNT, P.PRODUCT_PRICE PRODUCT_PRICE, I.IMAGEFILE IMAGEFILE
+		FROM ORDERS O INNER JOIN ORDER_PRODUCT OP
+			ON O.ORDER_NUM = OP.ORDER_NUM
+			INNER JOIN PRODUCT P
+			ON OP.PRODUCT_NUM = P.PRODUCT_NUM
+			INNER JOIN PARTNER T
+			ON P.PARTNER_NUM = T.PARTNER_NUM
+			INNER JOIN PRODUCT_IMG I
+			ON I.PRODUCT_NUM = P.PRODUCT_NUM
+		WHERE O.ID = #{id} 
+        AND O.REGDATE BETWEEN #{ago} AND #{today}
+	</select>
+	
+	
+	<!-- 파트너 센터 -->
+	
+	<!-- 판매자 등급 조회 -->
+	<select id="partnerAccess" parameterType="string" resultType="int">
+		SELECT GRADE_NUM
+        FROM MEMBERS
+        WHERE ID = #{id}
+	</select>
+	
+	<!-- 카테고리 조회 -->
+	<select id="categoryList" resultType="categoryVO">
+		SELECT CATEGORY_NUM, CATEGORY_NAME
+        FROM CATEGORY
+	</select>
+	
+	<!-- 세부 카테고리 조회 -->
+	<select id="categoryDetailList" parameterType="int" resultType="categoryDetailVO">
+		SELECT CATEGORY_DETAIL_NUM, CATEGORY_NUM, CATEGORY_DETAIL
+        FROM CATEGORY_DETAIL
+        WHERE CATEGORY_NUM = #{categoryNum}
+	</select>
+	
+	
+	<!-- 상품 등록 -->
+	<insert id="insertProduct" parameterType="productInsertVO">
+		INSERT INTO PRODUCT
+       	       (PRODUCT_NUM, CATEGORY_NUM, PARTNER_NUM, PRODUCT_NAME,
+				PRODUCT_PRICE, STOCK, SALES, CATEGORY_DETAIL )
+        VALUES (PRODUCT_NUM_SEQ.NEXTVAL, #{categoryNum}, #{partnerNum}, #{productName},
+               #{productPrice}, #{stock}, 0, #{categoryDetail})
+	</insert>
+	<!-- 상품 번호 조회 -->
+	<select id="productNum" parameterType="string" resultType="int">
+		SELECT PRODUCT_NUM
+        FROM PRODUCT
+        WHERE PRODUCT_NAME = #{productName}
+	</select>
+	
+	<!-- 상품 대표 이미지 등록-->
+	<insert id="insertProductImg" parameterType="productInsertImgVO">
+		INSERT INTO PRODUCT_IMG
+       	       (PIMG_IDX, PRODUCT_NUM, IMAGEFILE)
+        VALUES (PIMG_IDX_SEQ.NEXTVAL, #{productNum}, #{imagefile})
+	</insert>
+	
+	<!-- 상품 상세 이미지 등록-->
+	<update id="insertProductInfoImg" parameterType="productInsertInfoImgVO">
+		UPDATE PRODUCT
+			SET PRODUCT_INFO = #{productInfo}
+		WHERE PRODUCT_NUM = #{productNum}
+	</update>
+	
+	<!-- 판매자 번호 조회 -->
+	<select id="partnerNum" parameterType="string" resultType="int">
+		SELECT PARTNER_NUM
+        FROM PARTNER
+        WHERE ID = #{id}
+	</select>
+	
+	<!-- 상품 조회 (전체) -->
+	<select id="productListAll" parameterType="string" resultType="productListVO">
+		SELECT P.PRODUCT_NUM PRODUCT_NUM, C.CATEGORY_NAME CATEGORY_NAME, D.CATEGORY_DETAIL CATEGORY_DETAIL, 
+        		P.PRODUCT_NAME PRODUCT_NAME, P.STOCK STOCK, P.PRODUCT_PRICE PRODUCT_PRICE
+		FROM PRODUCT P INNER JOIN CATEGORY C
+   			ON P.CATEGORY_NUM = C.CATEGORY_NUM
+    		INNER JOIN CATEGORY_DETAIL D
+    		ON P.CATEGORY_DETAIL = D.CATEGORY_DETAIL
+		WHERE P.PARTNER_NUM = (SELECT PARTNER_NUM
+					            FROM PARTNER
+					            WHERE ID = #{id})
+		AND P.DEL IS NULL
+		ORDER BY P.PRODUCT_NUM DESC 			            
+	</select>
+	<!-- 상품 조회 결과 (전체) -->
+	<select id="productListCount" parameterType="string" resultType="int">
+		SELECT COUNT(*)
+		FROM PRODUCT
+		WHERE PARTNER_NUM = (SELECT PARTNER_NUM
+					            FROM PARTNER
+					            WHERE ID = #{id})
+		AND DEL IS NULL
+		ORDER BY PRODUCT_NUM DESC 			            
+	</select>
+	<!-- 상품 조회 (카테고리) -->
+	<select id="productListCategory" parameterType="productListCategoryVO" resultType="productListVO">
+		SELECT P.PRODUCT_NUM PRODUCT_NUM, C.CATEGORY_NAME CATEGORY_NAME, D.CATEGORY_DETAIL CATEGORY_DETAIL, 
+        		P.PRODUCT_NAME PRODUCT_NAME, P.STOCK STOCK, P.PRODUCT_PRICE PRODUCT_PRICE
+		FROM PRODUCT P INNER JOIN CATEGORY C
+   			ON P.CATEGORY_NUM = C.CATEGORY_NUM
+    		INNER JOIN CATEGORY_DETAIL D
+    		ON P.CATEGORY_DETAIL = D.CATEGORY_DETAIL_NUM
+		WHERE P.PARTNER_NUM = (SELECT PARTNER_NUM
+					            FROM PARTNER
+					            WHERE ID = #{id})
+		AND P.CATEGORY_DETAIL = #{categoryDetail}
+	</select>
+	
+	<!-- 상품 조회 (수정 전) -->
+	<select id="productUpdateList" parameterType="int" resultType="productUpdateListVO">
+		SELECT P.CATEGORY_NUM CATEGORY_NUM, P.PRODUCT_NAME PRODUCT_NAME, P.PRODUCT_PRICE PRODUCT_PRICE, 
+		P.STOCK STOCK, P.CATEGORY_DETAIL CATEGORY_DETAIL, P.PRODUCT_NUM PRODUCT_NUM
+		FROM PRODUCT P INNER JOIN PRODUCT_IMG I
+			ON P.PRODUCT_NUM = I.PRODUCT_NUM
+        WHERE P.PRODUCT_NUM = #{productNum}
+	</select>
+	
+	<!-- 상품 수정 -->
+	<update id="updateProduct" parameterType="productUpdateListVO">
+		UPDATE PRODUCT
+   	       SET CATEGORY_NUM = #{categoryNum}, 
+				PRODUCT_NAME = #{productName},
+				PRODUCT_PRICE = #{productPrice}, 
+				STOCK = #{stock}, 
+				CATEGORY_DETAIL = #{categoryDetail}
+        WHERE PRODUCT_NUM = #{productNum}
+	</update>
+	<!-- 상품 재고 수정 -->
+	<update id="updateProductStock" parameterType="productUpdatestockVO">
+		UPDATE PRODUCT
+   	       SET STOCK = #{stock}
+        WHERE PRODUCT_NUM = #{productNum}
+	</update>
+	<!-- 상품 삭제 -->
+	<update id="deleteProduct" parameterType="deleteStatusVO">
+		UPDATE PRODUCT
+   	       SET DEL = #{del}
+        WHERE PRODUCT_NUM = #{productNum}
+	</update>
+</mapper>
+
+
+
+
+
+

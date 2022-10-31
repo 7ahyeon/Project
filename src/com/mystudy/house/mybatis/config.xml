@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+  
+	<settings>
+		<setting name="jdbcTypeForNull" value="NULL"/>
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+	</settings>
+
+	<typeAliases>
+		<typeAlias alias="myinquiryVO" type="com.mystudy.house.vo.MyinquiryVO"/>
+		<typeAlias alias="myinquirycommentVO" type="com.mystudy.house.vo.MyinquirycommentVO"/>
+		<typeAlias alias="myinquirypageVO" type="com.mystudy.house.vo.MyinquirypageVO"/>
+		<typeAlias alias="mypointVO" type="com.mystudy.house.vo.MypointVO"/>
+		<typeAlias alias="myidperiodVO" type="com.mystudy.house.vo.MyidperiodVO"/>
+		<typeAlias alias="myorderlistVO" type="com.mystudy.house.vo.MyorderlistVO"/>
+		<typeAlias alias="categoryVO" type="com.mystudy.house.vo.CategoryVO"/>
+		<typeAlias alias="categoryDetailVO" type="com.mystudy.house.vo.CategoryDetailVO"/>
+		<typeAlias alias="productInsertVO" type="com.mystudy.house.vo.ProductInsertVO"/>
+		<typeAlias alias="productInsertImgVO" type="com.mystudy.house.vo.ProductInsertImgVO"/>
+		<typeAlias alias="productInsertInfoImgVO" type="com.mystudy.house.vo.ProductInsertInfoImgVO"/>
+		<typeAlias alias="productListVO" type="com.mystudy.house.vo.ProductListVO"/>
+		<typeAlias alias="productListCategoryVO" type="com.mystudy.house.vo.ProductListCategoryVO"/>
+		<typeAlias alias="productUpdateListVO" type="com.mystudy.house.vo.ProductUpdateListVO"/>
+		<typeAlias alias="deleteStatusVO" type="com.mystudy.house.vo.DeleteStatusVO"/>
+		<typeAlias alias="productUpdatestockVO" type="com.mystudy.house.vo.ProductUpdatestockVO"/>
+	</typeAliases>
+	
+ 
+  <environments default="development">
+    <environment id="development">
+      <transactionManager type="JDBC"/>
+      <dataSource type="POOLED">
+        <property name="driver" value="oracle.jdbc.OracleDriver"/>
+        <property name="url" value="jdbc:oracle:thin:@192.168.18.10:1521:xe"/>
+        <property name="username" value="house"/>
+        <property name="password" value="house"/>
+      </dataSource>
+    </environment>
+  </environments>
+  
+  <mappers>
+    <mapper resource="com/mystudy/house/mybatis/mapper.xml"/>
+  </mappers>
+  
+</configuration>

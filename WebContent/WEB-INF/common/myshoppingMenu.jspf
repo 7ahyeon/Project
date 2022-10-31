@@ -1,0 +1,19 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<script>
+	function all_search() {
+		location.href = "controller?type=inquiryList";
+	}
+</script>
+<nav class="navbar navbar-expand-sm border-bottom justify-content-center">
+	<ul class="navbar-nav">
+		<li class="nav-item">
+			<a class="nav-link myshoppinghome" href="myshopping.do">주문/배송내역 조회</a>
+    	</li>
+    	<li class="nav-item">
+      		<a class="nav-link myinquiry" href="myinquiry.do">나의 문의내역</a>
+    	</li>
+    	<li class="nav-item">
+      		<a class="nav-link mypoint" href="mypoint.do">포인트</a>
+    	</li>
+	</ul>
+</nav>

@@ -1,0 +1,15 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<nav class="navbar navbar-expand-sm border-bottom justify-content-center">
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link infoEdit" href="infoEdit.do">회원정보수정</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link pwChange" href="pwChange.do">비밀번호 변경</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link withdraw" href="withdraw.do">탈퇴하기</a>
+    </li>
+  </ul>
+</nav>

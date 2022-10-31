@@ -1,0 +1,17 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<nav class="navbar navbar-expand-sm border-bottom">
+	<ul class="navbar-nav">
+		<li class="nav-item">
+			<a class="nav-link home" href="../store/store.jsp">스토어홈</a>
+    	</li>
+    	<li class="nav-item">
+			<a class="nav-link category" href="#">카테고리</a>
+    	</li>
+    	<li class="nav-item">
+      		<a class="nav-link best" href="#">베스트</a>
+    	</li>
+    	<li class="nav-item">
+      		<a class="nav-link discount" href="#">기획전</a>
+    	</li>
+  	</ul>
+</nav>

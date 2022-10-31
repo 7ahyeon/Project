@@ -1,0 +1,18 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<nav class="navbar navbar-expand-sm border-bottom justify-content-center">
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link profile">프로필</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link myshopping"  href="myshopping.do">나의 쇼핑</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link myreview">나의 리뷰</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link myupdate" href="infoEdit.do">설정</a>
+    </li>
+  </ul>
+</nav>

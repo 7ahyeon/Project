@@ -1,0 +1,27 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<nav class="navbar navbar-expand-sm border-bottom font-weight-bold">
+<div class="navbar-collapse collapse justify-content-around">
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link orderAll" href="orderShipping.do">전체주문</a>
+    </li>
+    </ul>
+    <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link orderUncomfirmed" href="orderUncomfirmed.do">미확인주문</a>
+    </li>
+    </ul>
+    <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link orderBTN" href="orderBTN.do">송장입력대기</a>
+    </li>
+    </ul>
+    <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link orderInTransit" href="orderInTransit.do">배송중</a>
+    </li>
+    </ul>
+   
+  </div>
+</nav>

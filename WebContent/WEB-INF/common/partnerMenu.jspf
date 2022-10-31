@@ -1,0 +1,44 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<nav class="navbar navbar-expand-sm" style="font-size: 1.1em; font-weight: bold;background-color:#35C5F0;">
+  <a id="titleFont" class="navbar-brand text-white" href="../community/community.jsp">모두의집</a>
+  <div class="navbar-collapse collapse justify-content-between">
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link text-white" href="partnercenter.do">파트너 센터</a>
+    </li>
+  </ul>
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link text-white"  style="font-size:0.7em;" href="#">오늘의집 고객센터<br>
+      <span class="text-white font-weight-bold" style="font-size:1.6em;">1670-0876</span></a>
+    </li>
+  </ul>
+  </div>
+</nav>
+<nav class="navbar navbar-expand-sm border-bottom" style="font-size: 1.1em; font-weight: bold;">
+<div class="navbar-collapse collapse justify-content-around">
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link productManager" href="partnercenter.do">상품관리</a>
+    </li>
+    </ul>
+    <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link orderShipping" href="orderShipping.do">주문배송</a>
+    </li>
+    </ul>
+    
+    <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link inquiryReview" href="inquiry.do">문의/후기</a>
+    </li>
+    </ul>
+    <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link receipt" href="receipt.do">정산관리</a>
+    </li>
+  </ul>
+  </div>
+  
+</nav>
