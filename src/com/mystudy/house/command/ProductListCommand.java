@@ -1,4 +1,4 @@
-package com.mystufy.house.command;
+package com.mystudy.house.command;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,7 +12,7 @@ import com.mystudy.house.dao.PartnercenterDAO;
 import com.mystudy.house.vo.CategoryVO;
 import com.mystudy.house.vo.ProductListVO;
 
-public class OrderShippingCommand implements Command {
+public class ProductListCommand implements Command {
 	
 	@Override
 	public String exec(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -20,7 +20,13 @@ public class OrderShippingCommand implements Command {
 		//String id = (String) session.getAttribute("id");
 		String id = "800do";
 
-		return "/WEB-INF/partnercenter/orderShipping.jsp";
+		List<CategoryVO> categoryList = PartnercenterDAO.getCategory();
+		request.setAttribute("categoryList", categoryList);
+		List<ProductListVO> productList = PartnercenterDAO.getProductListAll(id);
+		request.setAttribute("productList", productList);
+		int cnt = PartnercenterDAO.getProductListCount(id);
+		request.setAttribute("cnt", cnt);
+		return "/WEB-INF/partnercenter/productList.jsp";
 	}
 	
 }

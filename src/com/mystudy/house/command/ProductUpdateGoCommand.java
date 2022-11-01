@@ -1,4 +1,4 @@
-package com.mystufy.house.command;
+package com.mystudy.house.command;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,8 +13,9 @@ import com.mystudy.house.dao.PartnercenterDAO;
 import com.mystudy.house.vo.CategoryDetailVO;
 import com.mystudy.house.vo.ProductInsertImgVO;
 import com.mystudy.house.vo.ProductInsertVO;
+import com.mystudy.house.vo.ProductUpdateListVO;
 
-public class ProductInsertCommand implements Command {
+public class ProductUpdateGoCommand implements Command {
 	
 	@Override
 	public String exec(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -22,7 +23,7 @@ public class ProductInsertCommand implements Command {
 		//HttpSession session = request.getSession();
 		//String id = (String) session.getAttribute("id");
 		String id = "800do";
-		
+		int productNum = Integer.parseInt(request.getParameter("productNum"));
 		int categoryNum = Integer.parseInt(request.getParameter("categoryNum"));
 		int partnerNum = PartnercenterDAO.getPartnerNum(id);
 		String productName = request.getParameter("productName");
@@ -30,19 +31,17 @@ public class ProductInsertCommand implements Command {
 		int stock = Integer.parseInt(request.getParameter("stock"));
 		String categoryDetail = request.getParameter("categoryDetail");
 		
-		ProductInsertVO vo = new ProductInsertVO(categoryNum, partnerNum, productName, productPrice, stock, 
-												categoryDetail);
-		PartnercenterDAO.insertProduct(vo);
-		int productNum = PartnercenterDAO.getProductNum(productName);
-		String result = makeJson(productNum);
+		ProductUpdateListVO vo = new ProductUpdateListVO(categoryNum, productName, productPrice, stock,
+				categoryDetail, productNum);
+		PartnercenterDAO.getProductUpdatego(vo);
 		
-		return result;
-	}
-
-	private String makeJson(int productNum) {
-		StringBuilder result = new StringBuilder();
-		result.append("{ \"productNum\" : " + productNum + "}");
-		return result.toString();
+		PrintWriter out = response.getWriter();
+		out.println("<html><form name='frm' action='productUpdate.do' method='post'>" );
+		out.println("</form></html>");
+		out.print("<script>frm.submit();</script>");
+		out.close();
+		
+		return null;
 	}
 }
 

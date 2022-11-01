@@ -1,4 +1,4 @@
-package com.mystufy.house.command;
+package com.mystudy.house.command;
 
 public class MyshoppingImgCommand {
 	

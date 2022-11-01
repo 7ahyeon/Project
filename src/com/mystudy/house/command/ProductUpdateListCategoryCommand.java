@@ -1,4 +1,4 @@
-package com.mystufy.house.command;
+package com.mystudy.house.command;
 
 import java.io.IOException;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import com.mystudy.house.dao.PartnercenterDAO;
 import com.mystudy.house.vo.ProductListCategoryVO;
 import com.mystudy.house.vo.ProductListVO;

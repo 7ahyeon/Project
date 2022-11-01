@@ -220,7 +220,7 @@
 										<p style="position:absolute;margin:10px 300px;white-space:nowrap;">
 											<button id="shipping">
 												배송추적
-											</button><br>
+											</button><br>  
 											<button id="review">
 												리뷰작성
 											</button>
